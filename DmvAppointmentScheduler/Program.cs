@@ -3,6 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace DmvAppointmentScheduler
 {
@@ -40,16 +41,49 @@ namespace DmvAppointmentScheduler
         {
             // Your code goes here .....
             // Re-write this method to be more efficient instead of a assigning all customers to the same teller
-            
-            //tellers.Teller = tellers.Teller.OrderBy(t => t.specialtyType).ThenBy(t => t.multiplier).ToList();
+            Queue<Teller> TellerQueue = new Queue<Teller>();
+            Queue<Customer> CustomerQueue = new Queue<Customer>();
+            tellers.Teller = tellers.Teller.OrderBy(t => t.multiplier).ThenBy(t => t.specialtyType).ToList();
 
-            //customers.Customer = customers.Customer.OrderBy(c => c.type).ThenBy(c => Int32.Parse(c.duration)).ToList();
-            
+            customers.Customer = customers.Customer.OrderBy(c => Int32.Parse(c.duration)).ThenBy(c => c.type).ToList();
+
             foreach (Customer customer in customers.Customer)
             {
-                var appointment = new Appointment(customer, tellers.Teller[0]);
-                appointmentList.Add(appointment);
+                CustomerQueue.Enqueue(customer);
             }
+
+            foreach (Teller teller in tellers.Teller)
+            {
+                TellerQueue.Enqueue(teller);
+            }
+
+            foreach (Customer customer in customers.Customer)
+            {
+
+                foreach (Teller teller in tellers.Teller)
+                {
+                    while (TellerQueue.Count > 0 && CustomerQueue.Count > 0)
+                    {
+                        if (customer.type == teller.specialtyType)
+                        {
+    
+                            var appointment = new Appointment(customer, teller);
+                            appointmentList.Add(appointment);
+                        }
+                        else
+                        {
+                            var appointment = new Appointment(customer, teller);
+                            appointmentList.Add(appointment);
+                        }
+                        TellerQueue.Dequeue();
+                        CustomerQueue.Dequeue();
+                    }
+                    TellerQueue.Enqueue(teller);
+
+                }
+
+            }
+
         }
         static void OutputTotalLengthToConsole()
         {
