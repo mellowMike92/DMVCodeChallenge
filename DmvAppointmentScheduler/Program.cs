@@ -40,7 +40,12 @@ namespace DmvAppointmentScheduler
         {
             // Your code goes here .....
             // Re-write this method to be more efficient instead of a assigning all customers to the same teller
-            foreach(Customer customer in customers.Customer)
+            
+            //tellers.Teller = tellers.Teller.OrderBy(t => t.specialtyType).ThenBy(t => t.multiplier).ToList();
+
+            //customers.Customer = customers.Customer.OrderBy(c => c.type).ThenBy(c => Int32.Parse(c.duration)).ToList();
+            
+            foreach (Customer customer in customers.Customer)
             {
                 var appointment = new Appointment(customer, tellers.Teller[0]);
                 appointmentList.Add(appointment);
