@@ -44,19 +44,15 @@ namespace DmvAppointmentScheduler
             Queue<Teller> TellerQueue = new Queue<Teller>();
             Queue<Customer> CustomerQueue = new Queue<Customer>();
             tellers.Teller = tellers.Teller.OrderBy(t => t.multiplier).ThenBy(t => t.specialtyType).ToList();
-
             customers.Customer = customers.Customer.OrderBy(c => Int32.Parse(c.duration)).ThenBy(c => c.type).ToList();
-
             foreach (Customer customer in customers.Customer)
             {
                 CustomerQueue.Enqueue(customer);
             }
-
             foreach (Teller teller in tellers.Teller)
             {
                 TellerQueue.Enqueue(teller);
             }
-
             foreach (Customer customer in customers.Customer)
             {
 
@@ -79,11 +75,8 @@ namespace DmvAppointmentScheduler
                         CustomerQueue.Dequeue();
                     }
                     TellerQueue.Enqueue(teller);
-
                 }
-
             }
-
         }
         static void OutputTotalLengthToConsole()
         {
